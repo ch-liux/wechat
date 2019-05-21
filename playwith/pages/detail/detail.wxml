@@ -1,0 +1,100 @@
+<cu-custom bgColor="bg-gradual-blue" isBack="{{true}}" style="height:40px;">
+  <view slot="backText" bindtap="toBack">返回</view> 
+  <view slot="content">详情</view>
+</cu-custom>
+<view class="content">
+  <text wx:if="{{info.oid==oid}}" class="cuIcon-roundclose text-red" style="float:right;padding:5px;5px;" bindtap="showModal" data-target="del">删除</text>
+  <text wx:if="{{info.oid!=oid}}" class="cuIcon-warn text-red" style="float:right;padding:5px;5px;" bindtap="showModal" data-target="advice">举报</text>
+  <view class="text-center padding">
+    <block wx:if="{{info.types==0}}">
+      <image src="/images/type/game.png" class="png" mode="aspectFit" style="width:17px;height:17px;"></image>
+    </block>
+    <block wx:elif="{{info.types==1}}">
+      <image src="/images/type/travel.png" class="png" mode="aspectFit" style="width:17px;height:17px;"></image>
+    </block>
+    <block wx:elif="{{info.types==2}}">
+      <image src="/images/type/ktv.png" class="png" mode="aspectFit" style="width:17px;height:17px;"></image>
+    </block>
+    <block wx:else>
+      <image src="/images/type/other.png" class="png" mode="aspectFit" style="width:17px;height:17px;"></image>
+    </block>
+    <text class="text-black text-bold">{{info.title}}</text>
+  </view>
+
+  <view style="padding:10px 20px;">
+    <text>地址:</text>
+    <text>{{info.addr}}</text>
+  </view>
+
+  <view style="padding:10px 20px;">
+    <view style='float:left;'>
+      <text>开始:</text>
+      <text>{{info.sdate}}</text>
+    </view>
+    <view style='float:right;'>
+      <text>结束:</text>
+      <text>{{info.edate}}</text>
+    </view>
+  </view>
+
+  <view style="padding:25px 15px 0px 20px;">
+    <text style="text-indent:56rpx;">{{info.detail}}</text>
+  </view>
+
+  <view class="padding">
+    <view class="cu-item" wx:for="{{info.imgs}}" wx:key style="width:180px;height:100px;display:inline-block;margin-right:10px;">
+      <image src="{{item}}" mode="widthFix" bindtap="ViewImage" data-url="{{item}}"></image>
+    </view>
+  </view>
+</view>
+
+<!-- -->
+<view class="cu-modal {{modalName=='advice'?'show':''}}">
+  <view class="cu-dialog">
+    <view class="cu-bar bg-white justify-end">
+      <view class="content">举报</view>
+      <view class="action" bindtap="hideModal">
+        <text class="cuIcon-close text-red"></text>
+      </view>
+    </view>
+    <view class="padding-xl">
+      <form bindsubmit="sendAdvice">
+        <view class="cu-form-group align-start">
+          <view class="title">联系方式</view>
+          <input value="{{advice.phone}}" maxlength="11" bindinput="phoneInput" style="text-align:left;margin-top:10px;"></input>
+        </view>
+        <view class="cu-form-group align-start">
+          <view class="title">举报详情</view>
+          <textarea value="{{advice.content}}" maxlength="120" bindblur="contentInput" style="text-align:left;"></textarea>
+        </view>
+        <view class="cu-form-group cu-bar bg-white justify-end">
+          <view class="action">
+            <button class="cu-btn line-green text-green" bindtap="hideModal">取消</button>
+            <button class="cu-btn bg-green margin-left" form-type="submit">确定</button>
+          </view>
+        </view>
+      </form>
+    </view>
+  </view>
+</view>
+<!-- -->
+<!-- -->
+<view class="cu-modal {{modalName=='del'?'show':''}}">
+  <view class="cu-dialog">
+    <view class="cu-bar bg-white justify-end">
+      <view class="content">删除</view>
+      <view class="action" bindtap="hideModal">
+        <text class="cuIcon-close text-red"></text>
+      </view>
+    </view>
+    <view class="padding-xl">
+      确定删除？
+    </view>
+    <view class="cu-bar bg-white justify-end">
+      <view class="action">
+        <button class="cu-btn line-green text-green" bindtap="hideModal">取消</button>
+        <button class="cu-btn bg-green margin-left" bindtap="sendDel">确定</button>
+      </view>
+    </view>
+  </view>
+</view>

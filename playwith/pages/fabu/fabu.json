@@ -1,0 +1,5 @@
+{
+  "usingComponents": {
+    "zan-date-picker": "/zanui/datetime-picker/index"
+  }
+}

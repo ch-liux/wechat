@@ -1,0 +1,4 @@
+<cu-custom bgColor="bg-gradual-blue" isBack="{{true}}" style="height:40px;">
+  <view slot="backText" bindtap="toBack">返回</view>
+  <view slot="content">详情</view>
+</cu-custom>

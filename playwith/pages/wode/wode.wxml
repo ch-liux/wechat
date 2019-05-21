@@ -1,0 +1,156 @@
+<scroll-view scroll-y class="DrawerPage {{modalName!=''?'show':''}}">
+  <cu-custom bgColor="bg-gradual-blue">
+    <view slot="content">PlayWith</view>
+  </cu-custom>
+
+  <view class="UCenter-bg">
+    <block class="userinfo" wx:if="{{!hasUserInfo && canIUse}}">
+      <button open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 获取头像昵称 </button>
+    </block>
+    <block wx:else>
+      <image src="{{userInfo.avatarUrl}}" class="png" mode="widthFix" style="border-radius:50%;"></image>
+      <view class="margin-top-sm">
+        <text class="text-red">{{userInfo.nickName}}</text>
+      </view>
+    </block>
+  </view>
+
+  <view class="cu-list menu card-menu margin-top-xl margin-bottom-xl shadow-lg">
+    <view class="cu-item arrow">
+      <button class="cu-btn content" bindtap="showModal" data-target="fabu">
+        <text class="cuIcon-add text-grey"></text>
+        <text class="text-grey">发表记录</text>
+      </button>
+    </view>
+    <view class="cu-item arrow">
+      <view class="content" bindtap="showModal" data-target="browse">
+        <text class="cuIcon-location text-grey"></text>
+        <text class="text-grey">浏览记录</text>
+      </view>
+    </view>
+    <view class="cu-item arrow">
+      <view class="content" bindtap="showModal" data-target="about">
+        <text class="cuIcon-appreciate text-red"></text>
+        <text class="text-grey">关于</text>
+      </view>
+    </view>
+    <view class="cu-item arrow">
+      <button class="cu-btn content" bindtap="showModal" data-target="advice">
+        <text class="cuIcon-write text-cyan"></text>
+        <text class="text-grey">反馈</text>
+      </button>
+    </view>
+  </view>
+</scroll-view>
+
+<!-- 反馈 -->
+<view class="cu-modal {{modalName=='advice'?'show':''}}">
+  <view class="cu-dialog">
+    <view class="cu-bar bg-white justify-end">
+      <view class="content">反馈</view>
+      <view class="action" bindtap="hideModal">
+        <text class="cuIcon-close text-red"></text>
+      </view>
+    </view>
+    <view class="padding-xl">
+      <form bindsubmit="sendAdvice">
+        <view class="cu-form-group align-start">
+          <view class="title">联系方式</view>
+          <input value="{{advice.phone}}" maxlength="11" bindinput="phoneInput" style="text-align:left;margin-top:10px;"></input>
+        </view>
+        <view class="cu-form-group align-start">
+          <view class="title">反馈详情</view>
+          <textarea value="{{advice.content}}" maxlength="120" bindblur="contentInput" style="text-align:left;"></textarea>
+        </view>
+        <view class="cu-form-group cu-bar bg-white justify-end">
+          <view class="action">
+            <button class="cu-btn line-green text-green" bindtap="hideModal">取消</button>
+            <button class="cu-btn bg-green margin-left" form-type="submit">确定</button>
+          </view>
+        </view>
+      </form>
+    </view>
+  </view>
+</view>
+
+<view class="DrawerClose {{modalName!=''?'show':''}}" bindtap="hideModal">
+  <text class="cuIcon-pullright"></text>
+</view>
+<!-- 发布列表 -->
+<scroll-view scroll-y class="DrawerWindow {{modalName=='fabu'?'show':''}}">
+  <view class="cu-list menu card-menu margin-top-xl margin-bottom-xl shadow-lg">
+    <view class="cu-item arrow" wx:for="{{fabuList.results}}" wx:key="index">
+      <view class="content" bindtap='toDetail' data-id="{{item.pk}}">
+        <block wx:if="{{item.types==0}}">
+          <image src="/images/type/game.png" class="png" mode="aspectFit"></image>
+        </block>
+        <block wx:elif="{{item.types==1}}">
+          <image src="/images/type/travel.png" class="png" mode="aspectFit"></image>
+        </block>
+        <block wx:elif="{{item.types==2}}">
+          <image src="/images/type/ktv.png" class="png" mode="aspectFit"></image>
+        </block>
+        <block wx:else>
+          <image src="/images/type/other.png" class="png" mode="aspectFit"></image>
+        </block>
+        <text class="text-grey">{{item.title}}</text>
+      </view>
+    </view>
+    <view class="padding text-center" wx:if="{{fabuList.next}}">
+      <text class="text-grey" bindtap="nextBtn">加载更多...</text>
+    </view>
+  </view>
+</scroll-view>
+<!-- 浏览列表 -->
+<scroll-view scroll-y class="DrawerWindow {{modalName=='browse'?'show':''}}">
+  <view class="cu-list menu card-menu margin-top-xl margin-bottom-xl shadow-lg">
+    <view class="cu-item arrow" wx:for="{{fabuList}}" wx:key="index">
+      <view class="content" bindtap='toDetail' data-id="{{item.pk}}">
+        <view class="content">
+          <block wx:if="{{item.types==0}}">
+            <image src="/images/type/game.png" class="png" mode="aspectFit"></image>
+          </block>
+          <block wx:elif="{{item.types==1}}">
+            <image src="/images/type/travel.png" class="png" mode="aspectFit"></image>
+          </block>
+          <block wx:elif="{{item.types==2}}">
+            <image src="/images/type/ktv.png" class="png" mode="aspectFit"></image>
+          </block>
+          <block wx:else>
+            <image src="/images/type/other.png" class="png" mode="aspectFit"></image>
+          </block>
+          <text class="text-grey">{{item.title}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</scroll-view>
+<!-- 关于 -->
+<scroll-view scroll-y class="DrawerWindow {{modalName=='about'?'show':''}}">
+  <view class="cu-list menu card-menu margin-top-xl margin-bottom-xl shadow-lg">
+    <view class="cu-item" style="display:block;padding-top:10px;">
+      <view class="content">
+        <text class="cuIcon-appreciate text-grey"></text>
+        <text class="text-grey">关于作者</text>
+      </view>
+      <view class="content about-p">
+        昵称：weidao
+      </view>
+      <view class="content about-p">
+        邮箱：18283042497@163.com
+      </view>
+      <view class="content about-p">
+        博客：http://liux.yame.club/blog
+      </view>
+      <view class="content about-p">
+        简介：I'm from sichuan province.
+      </view>
+      <view class="content about-p">
+        喜好：电子竞技 旅游 音乐 电影 思考
+      </view>
+      <view class="content about-p" style="padding-bottom:10px;">
+        热爱：学习 阅读 分享
+      </view>
+    </view>
+  </view>
+</scroll-view>
